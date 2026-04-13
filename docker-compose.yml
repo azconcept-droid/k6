@@ -1,0 +1,13 @@
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+
+  k6:
+    image: grafana/k6
+    volumes:
+      - ./:/scripts
+    depends_on:
+      - api
+    command: run /scripts/auth-flow.js
