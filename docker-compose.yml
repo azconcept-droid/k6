@@ -5,6 +5,8 @@ services:
       - "3002:3002"
     environment:
       - NODE_ENV=production
+    volumes:
+      - ./app/app.db:/app/app.db
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3002"]

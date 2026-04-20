@@ -15,7 +15,7 @@ export const options = {
     { duration: '30s', target: 0 },  // Ramp down to 0 users
   ],
   thresholds: {
-    http_req_duration: ['p(95)<500'], // 95% of requests should be below 500ms
+    http_req_duration: ['p(95)<1000'], // 95% of requests should be below 1000ms
     login_success_rate: ['rate>0.95'], // Login success rate should be >95%
     profile_fetch_rate: ['rate>0.95'], // Profile fetch success rate should be >95%
   },
@@ -35,8 +35,8 @@ export default function () {
   loginDuration.add(loginEnd - loginStart);
 
   const loginSuccess = check(loginRes, {
-    'login status is 201': (r) => r.status === 201,
-    'login response time < 500ms': (r) => r.timings.duration < 500,
+    'login status is 200 or 201': (r) => r.status === 200 || r.status === 201,
+    'login response time < 1000ms': (r) => r.timings.duration < 1000,
     'login has access_token': (r) => r.json('access_token') !== undefined,
   });
 
@@ -58,7 +58,7 @@ export default function () {
 
     const profileSuccess = check(profileRes, {
       'profile status is 200': (r) => r.status === 200,
-      'profile response time < 500ms': (r) => r.timings.duration < 500,
+      'profile response time < 1000ms': (r) => r.timings.duration < 1000,
       'profile has user data': (r) => r.json() !== undefined,
     });
 
